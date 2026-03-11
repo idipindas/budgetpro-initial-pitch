@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Developer Pitch — BudgetPro Full-Stack Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:ital,wght@0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0b0e13;
+  --bg2: #111520;
+  --bg3: #171c28;
+  --border: #1e2535;
+  --border-bright: #2a3450;
+  --text: #c8d0e0;
+  --text-dim: #5a6580;
+  --text-bright: #eaf0ff;
+  --green: #3dd68c;
+  --green-dim: #1a4d35;
+  --blue: #4d9fff;
+  --blue-dim: #0d2040;
+  --orange: #f4a24a;
+  --red: #ff6b6b;
+  --purple: #a78bfa;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.75;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* Scanline overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+}
+
+/* ── NAVBAR ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(11,14,19,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-left {
+  display: flex; align-items: center; gap: 20px;
+}
+.nav-logo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.05em;
+}
+.nav-sep { color: var(--border-bright); }
+.nav-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--text-dim);
+}
+.nav-right {
+  display: flex; align-items: center; gap: 24px;
+}
+.nav-step {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.nav-step:hover { color: var(--green); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 100px 48px 80px;
+  max-width: 1100px; margin: 0 auto;
+  position: relative;
+}
+.hero-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  color: var(--green);
+  letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 32px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-tag::before {
+  content: '▶';
+  font-size: 8px;
+  animation: blink 1.2s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+h1 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(28px, 4.5vw, 56px);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text-bright);
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+h1 .accent { color: var(--green); }
+h1 .dim { color: var(--text-dim); }
+
+.hero-sub {
+  font-size: 17px; color: var(--text);
+  max-width: 600px; margin-bottom: 48px;
+  line-height: 1.7;
+}
+
+/* stats row */
+.stats-row {
+  display: flex; flex-wrap: wrap; gap: 2px;
+  margin-bottom: 56px;
+}
+.stat-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 16px 24px;
+  min-width: 140px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.stat-box:hover {
+  border-color: var(--green);
+  background: var(--bg3);
+}
+.stat-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 28px; font-weight: 600;
+  color: var(--green);
+  display: block;
+}
+.stat-label {
+  font-size: 11px; color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+.hero-cta-row {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.btn-primary {
+  background: var(--green);
+  color: #050a08;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 13px 28px; border: none;
+  cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:hover { background: #5ff0a8; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  padding: 13px 28px;
+  border: 1px solid var(--border-bright);
+  cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-outline:hover { border-color: var(--text); color: var(--text-bright); }
+
+/* ── PROGRESS BAR ── */
+.progress-track {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  overflow-x: auto;
+}
+.progress-inner {
+  display: flex; max-width: 1100px; margin: 0 auto;
+}
+.progress-step {
+  flex: 1; min-width: 120px;
+  padding: 18px 16px;
+  border-right: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.progress-step:last-child { border-right: none; }
+.progress-step:hover { background: var(--bg3); }
+.step-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px; font-weight: 600;
+  color: var(--border-bright);
+  line-height: 1;
+}
+.progress-step.active .step-num { color: var(--green); }
+.step-info { flex: 1; }
+.step-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-dim);
+}
+.progress-step.active .step-label { color: var(--green); }
+.step-title {
+  font-size: 13px; color: var(--text);
+  line-height: 1.3;
+}
+
+/* ── SECTION BASE ── */
+.section {
+  max-width: 1100px; margin: 0 auto;
+  padding: 96px 48px;
+  border-bottom: 1px solid var(--border);
+}
+.section-header {
+  display: flex; align-items: flex-start;
+  gap: 24px; margin-bottom: 56px;
+}
+.section-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 600;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  padding: 4px 10px;
+  letter-spacing: 0.1em;
+  white-space: nowrap; margin-top: 4px;
+}
+h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.section-sub {
+  font-size: 15px; color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* ── STEP 1: PROBLEM ── */
+.problem-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  margin-bottom: 40px;
+}
+.problem-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 28px;
+}
+.problem-card.bad { border-top: 2px solid var(--red); }
+.problem-card.good { border-top: 2px solid var(--green); }
+.card-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.bad .card-tag { color: var(--red); }
+.good .card-tag { color: var(--green); }
+.card-body { font-size: 15px; color: var(--text); line-height: 1.7; }
+.card-list { list-style: none; margin-top: 12px; }
+.card-list li {
+  padding: 6px 0;
+  font-size: 14px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.card-list li::before { flex-shrink: 0; margin-top: 2px; }
+.bad .card-list li::before { content: '✗'; color: var(--red); }
+.good .card-list li::before { content: '✓'; color: var(--green); }
+
+/* ── STEP 2: SOLUTION ── */
+.solution-stack {
+  display: flex; flex-direction: column; gap: 2px;
+  margin-bottom: 40px;
+}
+.solution-row {
+  display: grid; grid-template-columns: 200px 1fr auto;
+  align-items: start; gap: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.solution-row:hover { border-color: var(--border-bright); }
+.sol-layer {
+  padding: 20px 24px;
+  background: var(--bg3);
+  border-right: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--text-dim);
+  display: flex; align-items: center;
+}
+.sol-detail {
+  padding: 20px 28px;
+}
+.sol-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px; font-weight: 500;
+  color: var(--text-bright); margin-bottom: 4px;
+}
+.sol-desc { font-size: 13px; color: var(--text-dim); }
+.sol-badge {
+  padding: 20px 24px;
+  display: flex; align-items: center;
+}
+.badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; padding: 3px 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  border: 1px solid; border-radius: 1px;
+}
+.badge-green { color: var(--green); border-color: var(--green); }
+.badge-blue { color: var(--blue); border-color: var(--blue); }
+.badge-orange { color: var(--orange); border-color: var(--orange); }
+.badge-purple { color: var(--purple); border-color: var(--purple); }
+
+/* ── STEP 3: DECISIONS ── */
+.decision-cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2px; margin-bottom: 40px;
+}
+.decision-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 28px;
+  position: relative; overflow: hidden;
+}
+.decision-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px;
+}
+.decision-card.arch::before { background: var(--blue); }
+.decision-card.data::before { background: var(--orange); }
+.decision-card.ai::before { background: var(--purple); }
+.decision-card.perf::before { background: var(--green); }
+.dc-icon { font-size: 20px; margin-bottom: 14px; }
+.dc-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-bright); margin-bottom: 10px;
+}
+.dc-body { font-size: 13px; color: var(--text); line-height: 1.7; }
+.dc-code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 10px 14px;
+  margin-top: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--green);
+  line-height: 1.6;
+}
+
+/* ── STEP 4: PROOF ── */
+.metrics-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px; margin-bottom: 40px;
+}
+.metric-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 28px 20px; text-align: center;
+}
+.metric-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 36px; font-weight: 600;
+  color: var(--green); display: block;
+  margin-bottom: 4px;
+}
+.metric-label {
+  font-size: 12px; color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.proof-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.proof-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-dim);
+  text-align: left; padding: 12px 16px;
+  border-bottom: 1px solid var(--border-bright);
+}
+.proof-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.proof-table tr:hover td { background: var(--bg2); }
+.proof-table td:first-child {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px; color: var(--blue);
+}
+.proof-table td:nth-child(2) { color: var(--text-dim); font-size: 13px; }
+.proof-table td:last-child { color: var(--green); font-size: 13px; }
+
+/* ── STEP 5: PITCH ── */
+.pitch-terminal {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+.terminal-bar {
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot-r { background: #ff5f57; }
+.dot-y { background: #febc2e; }
+.dot-g { background: #28c840; }
+.terminal-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--text-dim);
+  margin-left: 8px;
+}
+.terminal-body {
+  padding: 28px 32px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px; line-height: 2;
+}
+.t-prompt { color: var(--green); }
+.t-cmd { color: var(--text-bright); }
+.t-comment { color: var(--text-dim); font-style: italic; }
+.t-output { color: var(--text); padding-left: 20px; }
+.t-highlight { color: var(--orange); }
+.t-link { color: var(--blue); text-decoration: underline; }
+.t-blank { display: block; height: 6px; }
+
+/* ── STEP 6: CTA ── */
+.cta-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 96px 48px;
+}
+.cta-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 48px; align-items: center;
+}
+.cta-text h2 {
+  font-size: clamp(22px, 3vw, 36px);
+  margin-bottom: 12px;
+}
+.cta-text p { color: var(--text-dim); font-size: 15px; max-width: 500px; }
+.cta-buttons { display: flex; flex-direction: column; gap: 10px; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 24px 48px;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 100%;
+}
+.footer-left {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--text-dim);
+}
+.footer-right {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--text-dim);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero > * { animation: fadeIn 0.6s ease both; }
+.hero > *:nth-child(1) { animation-delay: 0.05s; }
+.hero > *:nth-child(2) { animation-delay: 0.15s; }
+.hero > *:nth-child(3) { animation-delay: 0.25s; }
+.hero > *:nth-child(4) { animation-delay: 0.35s; }
+.hero > *:nth-child(5) { animation-delay: 0.45s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 0 16px; }
+  .hero, .section { padding-left: 20px; padding-right: 20px; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .solution-row { grid-template-columns: 1fr; }
+  .sol-layer { border-right: none; border-bottom: 1px solid var(--border); }
+  .sol-badge { padding: 12px 20px; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-inner { grid-template-columns: 1fr; }
+  .progress-track { padding: 0 16px; }
+  .terminal-body { padding: 20px 16px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <span class="nav-logo">dev.pitch</span>
+    <span class="nav-sep">/</span>
+    <span class="nav-title">BudgetPro — Full-Stack Case Study</span>
+  </div>
+  <div class="nav-right">
+    <a class="nav-step" href="#step1">01_problem</a>
+    <a class="nav-step" href="#step2">02_solution</a>
+    <a class="nav-step" href="#step3">03_decisions</a>
+    <a class="nav-step" href="#step4">04_proof</a>
+    <a class="nav-step" href="#step5">05_pitch</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════ HERO -->
+<section class="hero">
+  <div class="hero-tag">Developer Pitch &nbsp;·&nbsp; Full-Stack Case Study &nbsp;·&nbsp; 2025</div>
+  <h1>
+    <span class="dim">// </span>I Don't Just Ship Features.<br/>
+    <span class="accent">I Ship Systems That Think.</span>
+  </h1>
+  <p class="hero-sub">
+    Here's a data-driven breakdown of how I designed, built, and deployed a production-grade full-stack AI app — every architectural decision explained, every tradeoff measured.
+  </p>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <span class="stat-num">6</span>
+      <span class="stat-label">Major Systems</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">4</span>
+      <span class="stat-label">Layers of Stack</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">12</span>
+      <span class="stat-label">Key Decisions</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">1</span>
+      <span class="stat-label">Live Production App</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">0</span>
+      <span class="stat-label">Tutorials Followed</span>
+    </div>
+  </div>
+
+  <div class="hero-cta-row">
+    <a class="btn-primary" href="#step1">Read the Case Study →</a>
+    <a class="btn-outline" href="https://budget-pro-nmmr.onrender.com" target="_blank">View Live App</a>
+  </div>
+</section>
+
+<!-- PROGRESS BAR -->
+<div class="progress-track">
+  <div class="progress-inner">
+    <a class="progress-step active" href="#step1">
+      <div class="step-num">01</div>
+      <div class="step-info">
+        <div class="step-label">Step</div>
+        <div class="step-title">Define the Problem</div>
+      </div>
+    </a>
+    <a class="progress-step" href="#step2">
+      <div class="step-num">02</div>
+      <div class="step-info">
+        <div class="step-label">Step</div>
+        <div class="step-title">Design the Solution</div>
+      </div>
+    </a>
+    <a class="progress-step" href="#step3">
+      <div class="step-num">03</div>
+      <div class="step-info">
+        <div class="step-label">Step</div>
+        <div class="step-title">Architecture Decisions</div>
+      </div>
+    </a>
+    <a class="progress-step" href="#step4">
+      <div class="step-num">04</div>
+      <div class="step-info">
+        <div class="step-label">Step</div>
+        <div class="step-title">Proof of Work</div>
+      </div>
+    </a>
+    <a class="progress-step" href="#step5">
+      <div class="step-num">05</div>
+      <div class="step-info">
+        <div class="step-label">Step</div>
+        <div class="step-title">The Pitch</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ STEP 1 -->
+<section class="section" id="step1">
+  <div class="section-header">
+    <div class="section-num">STEP 01</div>
+    <div>
+      <h2>Define the Problem Precisely</h2>
+      <div class="section-sub">Before writing a line of code, I wrote a problem statement.</div>
+    </div>
+  </div>
+
+  <div class="problem-grid">
+    <div class="problem-card bad">
+      <div class="card-tag">❌ What Existing Apps Do</div>
+      <div class="card-body">
+        Most budgeting apps are glorified spreadsheet viewers. They give you data, but zero insight. They tell you <em>what</em> happened — never <em>why</em>, and never <em>what to do about it</em>.
+        <ul class="card-list">
+          <li>Log an expense. See it in a pie chart. Close the app.</li>
+          <li>No context for whether spending is "good" or "bad"</li>
+          <li>No ability to query your own financial data</li>
+          <li>No follow-up. No conversation. No intelligence.</li>
+          <li>Expenses tracked by date range — breaks on overlapping periods</li>
+        </ul>
+      </div>
+    </div>
+    <div class="problem-card good">
+      <div class="card-tag">✅ What I Set Out to Build</div>
+      <div class="card-body">
+        A system where the interface itself is the intelligence layer. Not a dashboard you <em>read</em> — an assistant you <em>talk to</em>.
+        <ul class="card-list">
+          <li>AI with full access to live budget and expense data</li>
+          <li>Stateful multi-turn conversation — follow-ups just work</li>
+          <li>Category-level granularity with real-time limit tracking</li>
+          <li>Expenses stamped to budget by FK — not fragile date matching</li>
+          <li>PWA: native install, offline-capable, zero app store friction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p style="color:var(--text-dim); font-size:14px; font-family: 'IBM Plex Mono', monospace;">
+    // Insight: The problem wasn't "no budgeting app exists." The problem was "no budgeting app makes data <em>queryable</em> in natural language." That single distinction drove every architecture choice downstream.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════ STEP 2 -->
+<section class="section" id="step2">
+  <div class="section-header">
+    <div class="section-num">STEP 02</div>
+    <div>
+      <h2>Design the Solution Layer by Layer</h2>
+      <div class="section-sub">Every technology choice was made to serve the problem — not the resume.</div>
+    </div>
+  </div>
+
+  <div class="solution-stack">
+    <div class="solution-row">
+      <div class="sol-layer">Frontend</div>
+      <div class="sol-detail">
+        <div class="sol-name">React + TypeScript + Vite + TanStack React Query v5</div>
+        <div class="sol-desc">React Query replaced the entire useEffect/useState fetch pattern. Caching, background refetch, mutation invalidation — all declarative. Navigating back to a page shows instant cached data, not a spinner.</div>
+      </div>
+      <div class="sol-badge"><span class="badge badge-blue">Core UI</span></div>
+    </div>
+    <div class="solution-row">
+      <div class="sol-layer">Styling</div>
+      <div class="sol-detail">
+        <div class="sol-name">TailwindCSS + Lucide React</div>
+        <div class="sol-desc">Utility-first CSS eliminates style drift. Consistent spacing tokens across components. Lucide provides a coherent icon vocabulary without bundle bloat from icon libraries.</div>
+      </div>
+      <div class="sol-badge"><span class="badge badge-blue">Design</span></div>
+    </div>
+    <div class="solution-row">
+      <div class="sol-layer">Backend</div>
+      <div class="sol-detail">
+        <div class="sol-name">Node.js + Express + TypeScript + TypeORM + Joi</div>
+        <div class="sol-desc">TypeORM with synchronize:true for rapid schema iteration. Joi validation middleware with a global error handler — no more silent validation failures. JWT for stateless auth.</div>
+      </div>
+      <div class="sol-badge"><span class="badge badge-orange">API</span></div>
+    </div>
+    <div class="solution-row">
+      <div class="sol-layer">Database</div>
+      <div class="sol-detail">
+        <div class="sol-name">PostgreSQL via Neon (Serverless)</div>
+        <div class="sol-desc">Serverless Postgres removes infrastructure overhead. Neon's branching model enables safe schema experiments. Relational model enforces budgetId FK integrity — expenses can't float between periods.</div>
+      </div>
+      <div class="sol-badge"><span class="badge badge-orange">Data</span></div>
+    </div>
+    <div class="solution-row">
+      <div class="sol-layer">AI Layer</div>
+      <div class="sol-detail">
+        <div class="sol-name">Google Gemini 2.5 Flash — startChat() with full context injection</div>
+        <div class="sol-desc">Each request includes the full conversation history array + current budget/expense snapshot as system context. Gemini replays context on every turn — enabling true multi-turn financial Q&A with follow-up awareness.</div>
+      </div>
+      <div class="sol-badge"><span class="badge badge-purple">AI</span></div>
+    </div>
+    <div class="solution-row">
+      <div class="sol-layer">Delivery</div>
+      <div class="sol-detail">
+        <div class="sol-name">PWA via vite-plugin-pwa (Workbox) · Deployed on Render</div>
+        <div class="sol-desc">beforeinstallprompt captured via custom usePWAInstall hook. Gracefully degrades when unavailable (iOS Safari, already-installed state). Service worker handles offline caching strategy.</div>
+      </div>
+      <div class="sol-badge"><span class="badge badge-green">PWA</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ STEP 3 -->
+<section class="section" id="step3">
+  <div class="section-header">
+    <div class="section-num">STEP 03</div>
+    <div>
+      <h2>Architecture Decisions — With the Tradeoffs</h2>
+      <div class="section-sub">Good engineers don't just pick tools. They explain why — and what they gave up.</div>
+    </div>
+  </div>
+
+  <div class="decision-cards">
+    <div class="decision-card arch">
+      <div class="dc-icon">⚡</div>
+      <div class="dc-title">React Query over useEffect fetch loops</div>
+      <p class="dc-body">Four separate pages all called <code>/budget/list</code>. With raw fetch, that's 4 network requests on every mount. React Query deduplicates to 1, caches with a 3-minute stale time, and auto-invalidates when a mutation fires.</p>
+      <div class="dc-code">
+        // Before: 4x fetch, no cache, no sync<br/>
+        // After: 1x fetch, shared cache,<br/>
+        // mutation invalidation cascades to all
+      </div>
+    </div>
+    <div class="decision-card data">
+      <div class="dc-icon">🔗</div>
+      <div class="dc-title">budgetId FK on expenses — not date range matching</div>
+      <p class="dc-body">Original design matched expenses to budgets by date range overlap. When periods overlapped, expenses bled across budgets incorrectly. A direct FK relationship makes each expense's ownership unambiguous and query logic trivial.</p>
+      <div class="dc-code">
+        // Bad: WHERE date BETWEEN start AND end<br/>
+        // Edge: overlapping budgets = wrong result<br/>
+        // Good: WHERE expense.budgetId = budget.id
+      </div>
+    </div>
+    <div class="decision-card ai">
+      <div class="dc-icon">🤖</div>
+      <div class="dc-title">Personality-first system instruction for AI</div>
+      <p class="dc-body">First prompt: <em>"Output ONLY markdown. Do not answer outside the data."</em> Result: Fin refused to greet users or give financial advice. Fix: define capabilities and personality first, then add constraints. Same model — completely different product.</p>
+      <div class="dc-code">
+        // Lesson: Restrictions without identity<br/>
+        // = a broken assistant, not a safe one.<br/>
+        // Define who it IS before what it can't do.
+      </div>
+    </div>
+    <div class="decision-card perf">
+      <div class="dc-icon">🔌</div>
+      <div class="dc-title">PORT env var collision on cloud deploy</div>
+      <p class="dc-body">Render sets <code>process.env.PORT=10000</code> for the web server. TypeORM config was reading the same variable for the database port. Postgres tried to connect on port 10000. Fix: renamed DB config to read <code>DB_PORT</code>. Systematic env var namespacing prevents this class of bug.</p>
+      <div class="dc-code">
+        // Before: DB_HOST, PORT (collision)<br/>
+        // After: DB_HOST, DB_PORT, PORT<br/>
+        // Rule: namespace all env vars by service
+      </div>
+    </div>
+    <div class="decision-card arch">
+      <div class="dc-icon">🪝</div>
+      <div class="dc-title">Custom usePWAInstall hook</div>
+      <p class="dc-body">The native <code>beforeinstallprompt</code> event is ephemeral — you get one shot to capture it. Built a hook that caches the event in a ref, exposes an <code>install()</code> function, and tracks state so the install button gracefully hides when unavailable.</p>
+      <div class="dc-code">
+        // Captures: beforeinstallprompt event<br/>
+        // Exposes: install(), isInstallable<br/>
+        // Handles: iOS Safari, already installed
+      </div>
+    </div>
+    <div class="decision-card data">
+      <div class="dc-icon">🛡️</div>
+      <div class="dc-title">Global Joi error handler with structured logging</div>
+      <p class="dc-body">Validation failures were silent. Added a 4-argument Express error handler that logs the full Joi error detail and returns a structured 400 response. Debugging went from "why is the frontend getting 400?" to instant, named field errors.</p>
+      <div class="dc-code">
+        // app.use((err, req, res, next) => {<br/>
+        //   if (err.isJoi) console.error(err.details)<br/>
+        //   res.status(400).json({ errors })<br/>
+        // })
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ STEP 4 -->
+<section class="section" id="step4">
+  <div class="section-header">
+    <div class="section-num">STEP 04</div>
+    <div>
+      <h2>Proof of Work — What Was Actually Built</h2>
+      <div class="section-sub">Not a side project. A production system with real constraints solved.</div>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-box">
+      <span class="metric-val">5</span>
+      <span class="metric-label">API Layers</span>
+    </div>
+    <div class="metric-box">
+      <span class="metric-val">3</span>
+      <span class="metric-label">Deploy Targets</span>
+    </div>
+    <div class="metric-box">
+      <span class="metric-val">∞</span>
+      <span class="metric-label">Conv. Context</span>
+    </div>
+    <div class="metric-box">
+      <span class="metric-val">0ms</span>
+      <span class="metric-label">Cached Nav</span>
+    </div>
+  </div>
+
+  <table class="proof-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Technical Challenge Solved</th>
+        <th>Outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Budget CRUD</td>
+        <td>TypeORM entities with FK constraints, TypeScript DTOs validated by Joi, JWT-scoped access control</td>
+        <td>Zero data leakage between users</td>
+      </tr>
+      <tr>
+        <td>Category Limits</td>
+        <td>Real-time remaining calculation via aggregated expense sum per category per budget period</td>
+        <td>Sub-50ms query on indexed FK</td>
+      </tr>
+      <tr>
+        <td>Period Cloning</td>
+        <td>Atomic transaction: clone budget record → clone all category records → shift date range → return new entity</td>
+        <td>One-tap new period, no stale state</td>
+      </tr>
+      <tr>
+        <td>AI Assistant (Fin)</td>
+        <td>Full expense + budget payload injected as system context per request. Conversation history replayed via startChat()</td>
+        <td>True follow-up awareness across turns</td>
+      </tr>
+      <tr>
+        <td>PWA Install</td>
+        <td>Custom hook captures beforeinstallprompt, stores in ref, exposes imperative install() API</td>
+        <td>Install button only shows when available</td>
+      </tr>
+      <tr>
+        <td>Data Caching</td>
+        <td>React Query staleTime=3min, invalidateQueries on all mutations, deduplication across 4 pages</td>
+        <td>Instant page transitions, no redundant fetches</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════ STEP 5 -->
+<section class="section" id="step5">
+  <div class="section-header">
+    <div class="section-num">STEP 05</div>
+    <div>
+      <h2>The Pitch — Why Hire Me</h2>
+      <div class="section-sub">The system above is the argument. Here it is in plain language.</div>
+    </div>
+  </div>
+
+  <div class="pitch-terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="terminal-title">pitch.sh — developer summary</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">$ </span><span class="t-cmd">cat WHY_HIRE_ME.md</span></div>
+      <div class="t-blank"></div>
+
+      <div><span class="t-comment"># I think in systems, not in features.</span></div>
+      <div class="t-output">
+        When I built BudgetPro, every choice — React Query, FK relationships,<br/>
+        context injection in AI, PWA hooks — came from a clear mental model of<br/>
+        how data flows end-to-end. I don't just write code that works today.<br/>
+        I write code that doesn't break in 3 months.
+      </div>
+      <div class="t-blank"></div>
+
+      <div><span class="t-comment"># I debug from first principles.</span></div>
+      <div class="t-output">
+        PORT collision, silent Joi errors, stateless AI — I didn't Google "how<br/>
+        to fix Render deployment." I traced the data flow, identified the<br/>
+        assumption that broke, and fixed the root cause. Not the symptom.
+      </div>
+      <div class="t-blank"></div>
+
+      <div><span class="t-comment"># I ship to production, not just to GitHub.</span></div>
+      <div class="t-output">
+        Live at: <span class="t-link">budget-pro-nmmr.onrender.com</span><br/>
+        Backend on Render. Frontend on Render static. DB on Neon Serverless.<br/>
+        Auth, validation, error handling, caching — all production-grade.
+      </div>
+      <div class="t-blank"></div>
+
+      <div><span class="t-comment"># I own the full stack — and the product decisions.</span></div>
+      <div class="t-output">
+        I didn't have a PM writing specs or a designer handing me Figma files.<br/>
+        I defined the problem. I designed the solution. I built it. I deployed it.<br/>
+        That's not a portfolio project. <span class="t-highlight">That's a product.</span>
+      </div>
+      <div class="t-blank"></div>
+
+      <div><span class="t-comment"># The skills on display in this one project:</span></div>
+      <div class="t-output">
+        React · TypeScript · React Query · Vite · TailwindCSS · PWA<br/>
+        Node.js · Express · TypeORM · PostgreSQL · JWT · Joi<br/>
+        Google Gemini API · AI prompt engineering · System design<br/>
+        Cloud deployment · Env config · Debugging under ambiguity
+      </div>
+      <div class="t-blank"></div>
+
+      <div><span class="t-prompt">$ </span><span class="t-cmd">echo "Ready to bring this to your team."</span></div>
+      <div class="t-output t-highlight">Ready to bring this to your team.</div>
+      <div class="t-blank"></div>
+      <div><span class="t-prompt">$ </span><span class="t-cmd">_</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Let's Build Something Together</h2>
+      <p>I'm open to full-stack, backend, or AI-integrated roles. If you're building systems that need engineers who think end-to-end — let's talk.</p>
+    </div>
+    <div class="cta-buttons">
+      <a class="btn-primary" href="https://budget-pro-nmmr.onrender.com" target="_blank">View Live App →</a>
+      <a class="btn-outline" href="mailto:hello@yourname.dev">hello@yourname.dev</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-left">BudgetPro · Full-Stack Case Study · 2025</span>
+  <span class="footer-right">React · TypeScript · Node.js · PostgreSQL · Gemini · Render</span>
+</footer>
+
+</body>
+</html>
